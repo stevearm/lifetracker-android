@@ -10,16 +10,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.couchbase.lite.Document;
-import com.couchbase.lite.QueryRow;
+public class EventListAdapter extends ArrayAdapter<LifeTrackerEvent> {
 
-public class EventListAdapter extends ArrayAdapter<QueryRow> {
-
-	private List<QueryRow> list;
+	private List<LifeTrackerEvent> list;
 	private final Context context;
 
 	public EventListAdapter(Context context, int resource,
-			int textViewResourceId, List<QueryRow> objects) {
+			int textViewResourceId, List<LifeTrackerEvent> objects) {
 		super(context, resource, textViewResourceId, objects);
 		this.context = context;
 		this.list = objects;
@@ -41,11 +38,9 @@ public class EventListAdapter extends ArrayAdapter<QueryRow> {
 		}
 
 		TextView label = ((ViewHolder) itemView.getTag()).label;
-		QueryRow row = list.get(position);
-		Document document = row.getDocument();
 		try {
-			Object property = document.getCurrentRevision().getProperty("when");
-			label.setText(property.toString());
+			LifeTrackerEvent event = list.get(position);
+			label.setText(event.getWhen());
 		} catch (Exception e) {
 			label.setText("Error");
 			Log.e(HomeActivity.LOG_TAG, "Error Displaying document", e);
